@@ -1,20 +1,33 @@
 package edu.wpi.surflab;
 
+import edu.wpi.surflab.utils.ResourceLoader;
+import edu.wpi.surflab.utils.ResourceLoader.FXMLResources;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import lombok.Getter;
 
-public class CurvatureApp extends Application {
+/**
+ * Initializes and builds the Multiscale Curvature Analysis Application.
+ * @author Matthew Spofford
+ */
+public final class CurvatureApp extends Application {
 
-  private final String APP_TITLE = "Multiscale Curvature Analysis";
-  private final String APP_FXML = "fxml/Controller.fxml";
-  private final double MIN_WIDTH = 640;
-  private final double MIN_HEIGHT = 480;
+  private static final String APP_TITLE = "Multiscale Curvature Analysis";
+  private static final double MIN_WIDTH = 640;
+  private static final double MIN_HEIGHT = 480;
+
+  @Getter private static Application currentApp = null;
+  @Getter private static Stage currentStage = null;
 
   @Override
-  public void start(Stage primaryStage) throws Exception {
-    final Scene appScene = FXMLLoader.load(getClass().getResource(APP_FXML));
+  /**
+   * Launches the Curvature Analysis Application.
+   */
+  public void start(Stage primaryStage) {
+    currentApp = this;
+    currentStage = primaryStage;
+    final Scene appScene = ResourceLoader.loadFXML(FXMLResources.APP);
     primaryStage.setScene(appScene);
     primaryStage.setTitle(APP_TITLE);
     primaryStage.setMinWidth(MIN_WIDTH);

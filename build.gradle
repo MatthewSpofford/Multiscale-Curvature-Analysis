@@ -23,7 +23,6 @@ repositories {
 
 dependencies {
     implementation(
-            'com.jfoenix:jfoenix:8.0.9',
             'org.controlsfx:controlsfx:8.40.16',
             'com.panemu:tiwulfx:2.0',
             'junit:junit:4.12',
