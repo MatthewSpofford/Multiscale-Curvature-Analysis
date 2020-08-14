@@ -9,6 +9,7 @@ import lombok.Getter;
 
 /**
  * Initializes and builds the Multiscale Curvature Analysis Application.
+ *
  * @author Matthew Spofford
  */
 public final class CurvatureApp extends Application {
@@ -21,9 +22,7 @@ public final class CurvatureApp extends Application {
   @Getter private static Stage currentStage = null;
 
   @Override
-  /**
-   * Launches the Curvature Analysis Application.
-   */
+  /** Launches the Curvature Analysis Application. */
   public void start(Stage primaryStage) {
     currentApp = this;
     currentStage = primaryStage;

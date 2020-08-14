@@ -1,6 +1,7 @@
 package edu.wpi.surflab.utils;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import edu.wpi.surflab.utils.ResourceLoader.FXMLResources;
 import java.util.List;
@@ -16,9 +17,7 @@ import org.testfx.framework.junit5.ApplicationTest;
 public class ResourceLoaderTester extends ApplicationTest {
 
   @Test
-  /**
-   * Test loadFXML with filepath as input
-   */
+  /** Test loadFXML with filepath as input */
   void loadStage() {
     final Scene testScene = ResourceLoader.loadFXML("TestScene.fxml");
 
@@ -27,9 +26,9 @@ public class ResourceLoaderTester extends ApplicationTest {
 
     // Make sure anchor pane was initialized
     AnchorPane pane = (AnchorPane) testScene.getRoot();
-    for(Node child : pane.getChildren()) {
+    for (Node child : pane.getChildren()) {
       // Make sure Text was initialized
-      if(child instanceof Text) {
+      if (child instanceof Text) {
         Text testText = (Text) child;
         assertTrue(testText.getText().equals("This is a test"));
         break;
@@ -38,9 +37,7 @@ public class ResourceLoaderTester extends ApplicationTest {
   }
 
   @Test
-  /**
-   * Goal is to test loadFXML with enum as input.
-   */
+  /** Goal is to test loadFXML with enum as input. */
   void loadApp() {
     final MenuBar bar = ResourceLoader.loadFXML(FXMLResources.MENU_BAR);
 
@@ -49,7 +46,7 @@ public class ResourceLoaderTester extends ApplicationTest {
 
     // Check if menu's are valid
     List<Menu> barMenu = bar.getMenus();
-    for (Menu menu : barMenu){
+    for (Menu menu : barMenu) {
       String label = menu.getText();
       // Make sure file menu exists
       if (label.equals("File")) {

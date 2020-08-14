@@ -1,4 +1,4 @@
-package edu.wpi.surflab.menubar;
+package edu.wpi.surflab.controllers;
 
 import edu.wpi.surflab.CurvatureApp;
 import edu.wpi.surflab.utils.ResourceLoader;
@@ -9,18 +9,19 @@ import javafx.stage.Stage;
 
 /**
  * Controller for menu bar in app window.
+ *
  * @author Matthew Spofford
  */
-public class BarController {
+public class MenuBarController {
   private boolean isAboutStageOpen = false;
 
   @FXML
   private void openAboutStage() {
-    if(!isAboutStageOpen) {
+    if (!isAboutStageOpen) {
       final Stage aboutStage = ResourceLoader.loadFXML(FXMLResources.ABOUT);
       aboutStage.setOnCloseRequest(event -> isAboutStageOpen = false);
       aboutStage.show();
-      isAboutStageOpen= true;
+      isAboutStageOpen = true;
     }
   }
 

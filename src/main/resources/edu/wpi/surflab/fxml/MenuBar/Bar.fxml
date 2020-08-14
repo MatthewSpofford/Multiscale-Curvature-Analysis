@@ -4,7 +4,7 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 
-<MenuBar prefHeight="17.0" prefWidth="1269.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.surflab.menubar.BarController">
+<MenuBar prefHeight="17.0" prefWidth="1269.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.surflab.controllers.MenuBarController">
   <menus>
     <Menu mnemonicParsing="false" text="File">
       <items>

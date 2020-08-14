@@ -83,8 +83,7 @@ jacocoTestCoverageVerification {
                 minimum = 1.0
             }
             excludes = [
-                    'edu.wpi.cs3733.c20.teamV.App',
-                    'edu.wpi.cs3733.c20.teamV.Main'
+                    'edu.wpi.surflab.CurvatureApp'
             ]
         }
 
@@ -96,8 +95,7 @@ jacocoTestCoverageVerification {
                 minimum = 0.25
             }
             excludes = [
-                    'edu.wpi.cs3733.c20.teamV.App',
-                    'edu.wpi.cs3733.c20.teamV.Main'
+                    'edu.wpi.surflab.CurvatureApp'
             ]
         }
 
@@ -109,8 +107,7 @@ jacocoTestCoverageVerification {
                 minimum = 0.25
             }
             excludes = [
-                    'edu.wpi.cs3733.c20.teamV.App',
-                    'edu.wpi.cs3733.c20.teamV.Main'
+                    'edu.wpi.surflab.CurvatureApp'
             ]
         }
     }
