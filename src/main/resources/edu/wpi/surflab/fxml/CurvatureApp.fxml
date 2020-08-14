@@ -21,7 +21,7 @@
              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" />
            </items>
          </SplitPane>
-         <fx:include source="MenuBar/Bar.fxml" />
+         <fx:include fx:id="menubar" source="MenuBar/Bar.fxml" />
       </children></AnchorPane>
    <fill>
       <LinearGradient cycleMethod="REFLECT" endX="0.08571428571428574" endY="0.9904761904761905" startX="0.09047619047619047" startY="0.10952380952380952">

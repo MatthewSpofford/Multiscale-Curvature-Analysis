@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Scene?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Text?>
+
+<Scene xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+    <AnchorPane prefHeight="363.0" prefWidth="468.0">
+      <children>
+         <Text fx:id="textBox" layoutX="128.0" layoutY="167.0" strokeType="OUTSIDE" strokeWidth="0.0" text="This is a test" textAlignment="CENTER" wrappingWidth="212.541015625" AnchorPane.bottomAnchor="104.298828125" AnchorPane.leftAnchor="128.0" AnchorPane.rightAnchor="127.458984375" AnchorPane.topAnchor="104.412109375">
+         </Text>
+      </children>
+   </AnchorPane>
+</Scene>

@@ -19,7 +19,8 @@ public final class ResourceLoader {
    */
   public enum FXMLResources {
     APP("CurvatureApp.fxml"),
-    ABOUT("MenuBar/About.fxml");
+    ABOUT("MenuBar/About.fxml"),
+    MENU_BAR("MenuBar/Bar.fxml");
 
     @Getter
     private final String location;
