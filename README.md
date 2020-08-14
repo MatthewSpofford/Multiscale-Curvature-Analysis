@@ -1,4 +1,4 @@
-
+[![Build Status](https://travis-ci.com/MatthewSpofford/Multiscale-Curvature-Analysis.svg?branch=main)](https://travis-ci.com/MatthewSpofford/Multiscale-Curvature-Analysis)
 # Multiscale Curvature Analysis
 
 ## About
