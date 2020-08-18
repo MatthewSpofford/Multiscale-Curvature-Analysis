@@ -18,6 +18,11 @@ public final class CurvatureApp extends Application {
   private static final double MIN_WIDTH = 640;
   private static final double MIN_HEIGHT = 480;
 
+  /**
+   * Property name used by JNA to define DLL location.
+   */
+  private static final String JNA_LIB_PROPERTY = "jna.library.path";
+
   @Getter private static Application currentApp = null;
   @Getter private static Stage currentStage = null;
 
@@ -35,6 +40,7 @@ public final class CurvatureApp extends Application {
   }
 
   public static void main(String[] args) {
+    System.setProperty(JNA_LIB_PROPERTY, ResourceLoader.SURF_API_PATH);
     launch(args);
   }
 }

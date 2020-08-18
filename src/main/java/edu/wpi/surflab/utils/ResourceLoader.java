@@ -30,7 +30,7 @@ public final class ResourceLoader {
   // Initialize SURF_API_PATH
   static {
     // Paths used to construct SURF_API_PATH
-    final String SURF_API_BASE = "utils/surfapi/";
+    final String SURF_API_BASE = "C:/Program Files/Digital Surf/MountainsMap Premium 7.4/SDK";
     final String SURF_API_x64 = "x64/";
     final String SURF_API_x86 = "Win32/";
 
