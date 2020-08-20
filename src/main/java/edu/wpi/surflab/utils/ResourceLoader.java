@@ -23,16 +23,17 @@ public final class ResourceLoader {
    */
   public static final String SURF_API_PATH;
   /**
-   * Defines name of SurfAPI in resources.
+   * Property name used by JNA to define DLL location.
    */
-  public static final String SURF_API = "surfapi.dll";
+  private static final String JNA_LIB_PROPERTY = "jna.library.path";
 
   // Initialize SURF_API_PATH
   static {
     // Paths used to construct SURF_API_PATH
-    final String SURF_API_BASE = "C:/Program Files/Digital Surf/MountainsMap Premium 7.4/SDK";
+    final String SURF_API_BASE = "C:/Program Files/Digital Surf/MountainsMap Premium 7.4/SDK/";
     final String SURF_API_x64 = "x64/";
     final String SURF_API_x86 = "Win32/";
+    final String SURF_API_DLL = "surfapi.dll";
 
     // Check that Windows is being used
     if (!Platform.isWindows()) {
@@ -42,7 +43,7 @@ public final class ResourceLoader {
     }
 
     // Check and determine architecture
-    String apiPath = BASE_RESOURCE_PATH + SURF_API_BASE;
+    String apiPath = SURF_API_BASE; //BASE_RESOURCE_PATH + SURF_API_BASE;
     if(Platform.is64Bit()) {
       apiPath += SURF_API_x64;
     } else {
@@ -50,7 +51,8 @@ public final class ResourceLoader {
     }
 
     // Assign final value to API path
-    SURF_API_PATH = apiPath;
+    SURF_API_PATH = apiPath + SURF_API_DLL;
+    System.setProperty(JNA_LIB_PROPERTY, SURF_API_PATH);
   }
 
   /** Maintains FXML locations for easy retrieval. */
@@ -74,7 +76,6 @@ public final class ResourceLoader {
   /**
    * More easily loads a specified fxml. Given path does not need to include "fxml" folder within
    * the path. Function also catches IOException, and throws an error if it is caught.
-   *
    * @param path Location path of FXML being loaded.
    * @param <T> Output type of root object in the given FXML.
    * @return Return root object of the given FXML.
@@ -94,8 +95,8 @@ public final class ResourceLoader {
   }
 
   /**
-   * More easily loads a specified fxml.
-   *
+   * More easily loads a specified fxml. Given path does not need to include "fxml" folder within
+   * the path. Function also catches IOException, and throws an error if it is caught.
    * @param location Specified FXML resource to be loaded.
    * @param <T> Output type of root object in the given FXML.
    * @return Return root object of the given FXML.
