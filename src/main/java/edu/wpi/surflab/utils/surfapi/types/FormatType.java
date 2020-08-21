@@ -4,8 +4,8 @@ import java.util.HashMap;
 import lombok.Getter;
 
 /**
- * Supports DSFORMAT type from SurfAPI DLL.
- * Supported formats for surface.
+ * Supports DSFORMAT type from SurfAPI DLL. Supported formats for surface.
+ *
  * @author Matthew Spofford
  */
 public enum FormatType {
@@ -17,25 +17,27 @@ public enum FormatType {
 
   // Used for reverse lookup for C-type enum to Java-enum
   private static final HashMap<Integer, FormatType> LOOKUP = new HashMap<>();
-  @Getter
-  private final int value;
+  @Getter private final int value;
 
   /**
    * Defines enum with given value.
+   *
    * @param value Corresponds to value of DSFORMAT enum.
    */
   FormatType(final int value) {
     this.value = value;
   }
+
   static {
     // Generate reverse lookup table for C-type conversion
-    for(FormatType s : FormatType.values()) {
+    for (FormatType s : FormatType.values()) {
       FormatType.LOOKUP.put(s.value, s);
     }
   }
 
   /**
    * Lookup C-like enums corresponding to given value.
+   *
    * @param value Value of the enum being looked up.
    * @return Output of the enum that was found.
    */

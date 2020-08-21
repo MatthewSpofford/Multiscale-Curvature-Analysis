@@ -15,32 +15,26 @@ import lombok.Getter;
 
 /**
  * Enables calls to SurfAPI, using {@link SurfAPI} interface.
+ *
  * @see SurfAPI
  * @author Matthew Sppofford
  */
 public class StudiableLoader {
-  /**
-   * Stores implementation for SurfAPI.
-   */
+  /** Stores implementation for SurfAPI. */
   private static final SurfAPI api = Native.load(ResourceLoader.SURF_API_PATH, SurfAPI.class);
 
-  /**
-   * Surface file path for loader to use.
-   */
+  /** Surface file path for loader to use. */
   @Getter private final String filePath;
-  /**
-   * Stores loaded surface data from API.
-   */
+  /** Stores loaded surface data from API. */
   private StudiableCollection[] surfaces = null;
 
-  /**
-   * File handle address pointer.
-   */
-//  private NativeLong fileHandleAddr;
+  /** File handle address pointer. */
+  //  private NativeLong fileHandleAddr;
   private long fileHandleAddr;
 
   /**
    * Creates a surface loader object using given surface file to be loaded.
+   *
    * @param filePath Location of surface file to be opened. Recommended to be absolute file path.
    */
   public StudiableLoader(final String filePath) {
@@ -49,11 +43,12 @@ public class StudiableLoader {
 
   /**
    * Outputs copy of previously loaded surface data.
+   *
    * @return Array of {@link StudiableInfo} from API. Returns null if {@link StudiableLoader#load()}
-   * has not been called yet.
+   *     has not been called yet.
    */
   public StudiableCollection[] getSurfaces() {
-    if(surfaces == null) {
+    if (surfaces == null) {
       return null;
     } else {
       return surfaces.clone();
@@ -61,25 +56,31 @@ public class StudiableLoader {
   }
 
   /**
-   * Opens surface file and outputs raw surfaces data.
-   * After the first load, the data is not reloaded and instead uses the previously loaded data.
+   * Opens surface file and outputs raw surfaces data. After the first load, the data is not
+   * reloaded and instead uses the previously loaded data.
+   *
    * @return Array of {@link StudiableCollection} from API. Outputs null if load was unsuccessful.
-   *         Outputs null elements if that studiable could not be loaded correctly.
+   *     Outputs null elements if that studiable could not be loaded correctly.
    */
   public StudiableCollection[] load() throws UnsupportedOperationException {
     // Only use API if surfaces have not been loaded
-    if(surfaces == null) {
+    if (surfaces == null) {
       // Create array for surfaces being loaded later
       StudiableCollection[] loadedSurfaces;
 
       boolean successful = false;
       try {
         ShortByReference objCountPtr = new ShortByReference();
-//        NativeLongByReference fileHandlePtr = new NativeLongByReference();
+        //        NativeLongByReference fileHandlePtr = new NativeLongByReference();
         LongByReference fileHandlePtr = new LongByReference();
         // Use surfAPI to open file for reading
-        checkSuccessful(api.dsOpenStudiable(filePath, FileOpenFlags.kdsReadFile.getValue(),
-                                     new IntByReference(), objCountPtr, fileHandlePtr));
+        checkSuccessful(
+            api.dsOpenStudiable(
+                filePath,
+                FileOpenFlags.kdsReadFile.getValue(),
+                new IntByReference(),
+                objCountPtr,
+                fileHandlePtr));
 
         // Update studiable attributes
         short objCount = objCountPtr.getValue();
@@ -88,8 +89,8 @@ public class StudiableLoader {
         // Store loaded surfaces
         loadedSurfaces = new StudiableCollection[objCount];
         // Collect data for surfaces
-        for(int i = 0; i < loadedSurfaces.length; i++) {
-          NativeLong currObj = new NativeLong(i+1);
+        for (int i = 0; i < loadedSurfaces.length; i++) {
+          NativeLong currObj = new NativeLong(i + 1);
 
           // Read surface metadata
           StudiableInfo info = new StudiableInfo();
@@ -99,14 +100,14 @@ public class StudiableLoader {
 
           // Read surface comment data
           byte[] comment = new byte[info.commentSize];
-          if(info.commentSize > 0) {
+          if (info.commentSize > 0) {
             checkSuccessful(api.dsReadObjectComment(this.fileHandleAddr, currObj, comment));
           }
 
           // Read surface point data
           final int size = info.xCount.intValue() * info.yCount.intValue();
           int[] points = new int[size];
-          if(size > 0) {
+          if (size > 0) {
             checkSuccessful(api.dsReadObjectPoints(this.fileHandleAddr, currObj, points));
           }
 
@@ -122,7 +123,7 @@ public class StudiableLoader {
       } finally {
         int result = api.dsCloseStudiable(this.fileHandleAddr);
         // Check if surface closed successfully only if a previous error was not thrown
-        if(successful) {
+        if (successful) {
           checkSuccessful(result);
         }
       }
@@ -135,6 +136,7 @@ public class StudiableLoader {
 
   /**
    * Throw exception if unsupported result occurred while using SurfAPI.
+   *
    * @param result Given unsupported result value collected while running openSurfaces.
    */
   private void checkSuccessful(int result) throws UnsupportedOperationException {
@@ -144,6 +146,7 @@ public class StudiableLoader {
   /**
    * Unsupported result occured during runtime of openSurfaces, and an error needs to be thrown.
    * Aborts file handler if possible.
+   *
    * @param result Check given result for .
    */
   private void checkSuccessful(ResultType result) throws UnsupportedOperationException {
@@ -152,8 +155,13 @@ public class StudiableLoader {
       // Abort file opening process
       api.dsAbortOpsOnStudiable(this.fileHandleAddr);
       // Throw error
-      throw new UnsupportedOperationException("Unsupported return from surfAPI, "
-          + "output was: " + result.name() + "(" + result.getValue() + ")");
+      throw new UnsupportedOperationException(
+          "Unsupported return from surfAPI, "
+              + "output was: "
+              + result.name()
+              + "("
+              + result.getValue()
+              + ")");
     }
 
     // Otherwise, continue with success

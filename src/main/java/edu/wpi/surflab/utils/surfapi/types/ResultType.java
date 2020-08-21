@@ -4,20 +4,20 @@ import java.util.HashMap;
 import lombok.Getter;
 
 /**
- * Supports DSRESULT type from SurfAPI DLL.
- * Result error codes.
+ * Supports DSRESULT type from SurfAPI DLL. Result error codes.
+ *
  * @author Matthew Spofford
  */
 public enum ResultType {
-  kdsOK( 1), // success !
-  kdsError( 0), // generic error
+  kdsOK(1), // success !
+  kdsError(0), // generic error
   kdsInvalidFilename(-1), // invalid filename
   kdsInvalidObject(-2), // invalid object number
   kdsInvalidInfos(-3), // structure infos
   kdsInvalidComment(-4), // invalid comment
   kdsInvalidPoints(-5), // invalid array of points
   kdsAlreadyOpen(-6), // file already open
-  kdsNotEnoughMemory (-7), // not enough memory to run the operation
+  kdsNotEnoughMemory(-7), // not enough memory to run the operation
   kdsNotImplemented(-8), // function not yet implemented
   kdsInvalidPointSize(-9), // the size of the points is incorrect
   kdsInvalid1stArg(-10), //
@@ -51,39 +51,39 @@ public enum ResultType {
   kdsInvalidWCount(-36), // nWCount seems invalid
   kdsTotalPointsCountOverflow(-37), // too many points in the studiable
   // dimensions (nXCount * nYCount * nWCount) seems to generate an overflow
-  kdsCantChangeCompression(-38), // cannot change/set the compression if data has already been written to disk
+  kdsCantChangeCompression(
+      -38), // cannot change/set the compression if data has already been written to disk
   // compression must be set when opening the file and before writing the first object
-  kdsInvalidBooleanArg(-39),     // boolean parameter must be TRUE (1) or FALSE (0)
+  kdsInvalidBooleanArg(-39), // boolean parameter must be TRUE (1) or FALSE (0)
   kdsCompressionFailure(-40),
   kdsInvalidBitsPerPoint(-41),
   kdsInvalidGroupArray(-42), // invalid group array (null pointer?)
   kdsInvalidSectionArray(-43); // invalid section array (null pointer?)
 
-  /**
-   * Used for reverse lookup for C-type enum to Java-enum.
-   */
+  /** Used for reverse lookup for C-type enum to Java-enum. */
   private static final HashMap<Integer, ResultType> LOOKUP = new HashMap<>();
-  /**
-   * Result value of result type. Used in C-type enum within API.
-   */
+  /** Result value of result type. Used in C-type enum within API. */
   @Getter private final int value;
 
   /**
    * Defines enum with given value.
+   *
    * @param value Corresponds to value of DSRESULT enum.
    */
   ResultType(final int value) {
     this.value = value;
   }
+
   static {
     // Generate reverse lookup table for C-type conversion
-    for(ResultType s : ResultType.values()) {
+    for (ResultType s : ResultType.values()) {
       ResultType.LOOKUP.put(s.value, s);
     }
   }
 
   /**
    * Lookup C-like enums corresponding to given value.
+   *
    * @param value Value of the enum being looked up.
    * @return Output of the enum that was found.
    */
@@ -93,6 +93,7 @@ public enum ResultType {
 
   /**
    * Checks if input result was successful.
+   *
    * @param result Result value being checked for success.
    * @return True if successful.
    */
@@ -102,6 +103,7 @@ public enum ResultType {
 
   /**
    * Checks if input result was successful.
+   *
    * @param result Result value being checked for success.
    * @return True if successful.
    */

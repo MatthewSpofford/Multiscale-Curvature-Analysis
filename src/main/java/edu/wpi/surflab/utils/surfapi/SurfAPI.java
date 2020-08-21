@@ -11,37 +11,36 @@ import edu.wpi.surflab.utils.surfapi.types.StudiableInfo;
 
 /**
  * Mirrors DLL implementation of SurfAPI created by Digital Surf.
+ *
  * @author Matthew Spofford
  */
 interface SurfAPI extends StdCallLibrary {
   /**
-   * Initialisation of a file with which we are going to work.
-   * Original function from DLL:
-   *   DSRESULT dsOpenStudiable(const char* strFilename,
-   *     DSFILEFLAGS rw,
-   *     DSSTUDIABLE* pType,
-   *     short* pCount,
-   *     DSFILE* hFile
-   *   );
+   * Initialisation of a file with which we are going to work. Original function from DLL: DSRESULT
+   * dsOpenStudiable(const char* strFilename, DSFILEFLAGS rw, DSSTUDIABLE* pType, short* pCount,
+   * DSFILE* hFile );
+   *
    * @param strFilename Name of the file you want to open.
    * @param rw Kind of access to the file : kdsReadFile for reading, kdsWriteFile for writing.
-   * @param pType When reading, receives the kind of studiable which is in the file.
-   *              When writing, specifies the kind of studiable you are going to store.
-   * @param pCount When reading, receives the object count of the studiable stored in the file.
-   *               When writing, defines the object count of the studiable.
+   * @param pType When reading, receives the kind of studiable which is in the file. When writing,
+   *     specifies the kind of studiable you are going to store.
+   * @param pCount When reading, receives the object count of the studiable stored in the file. When
+   *     writing, defines the object count of the studiable.
    * @param hFile Address of a handle to a Surf file. This variable will be used in all the
-   *              following calls to the API.
+   *     following calls to the API.
    * @return kdsOK if successful.
    */
-  int dsOpenStudiable(String strFilename, int rw, IntByReference pType, ShortByReference pCount,
-                      LongByReference hFile);
+  int dsOpenStudiable(
+      String strFilename,
+      int rw,
+      IntByReference pType,
+      ShortByReference pCount,
+      LongByReference hFile);
 
   /**
    * When the file has been successfully written/read, this function validates and closes the file.
-   * Original function from DLL:
-   *   DSRESULT dsCloseStudiable(
-   *     DSFILE hFile
-   *   );
+   * Original function from DLL: DSRESULT dsCloseStudiable( DSFILE hFile );
+   *
    * @param hFile Address of handle to the file you want to close.
    * @return kdsOK if successful.
    */
@@ -49,96 +48,49 @@ interface SurfAPI extends StdCallLibrary {
 
   /**
    * When an error occurs, this functions stops all operations on this file, and frees all data
-   * associated.
-   * Original function from DLL:
-   *   DSRESULT dsAbortOpsOnStudiable(
-   *     DSFILE hFile
-   *   );
+   * associated. Original function from DLL: DSRESULT dsAbortOpsOnStudiable( DSFILE hFile );
+   *
    * @param hFile Address of handle to the file you want to close.
    * @return kdsOK if successful.
    */
   int dsAbortOpsOnStudiable(long hFile);
 
   /**
-   * Obtains information about the specified surface object.
-   * Original function from DLL:
-   *   DSRESULT dsReadObjectInfos(
-   *     DSFILE hFile,
-   *     long nObject,
-   *     struct TSurfObjectInfos* pInfos
-   *   );
+   * Obtains information about the specified surface object. Original function from DLL: DSRESULT
+   * dsReadObjectInfos( DSFILE hFile, long nObject, struct TSurfObjectInfos* pInfos );
+   *
    * @param hFile Handle of the file from which you want to obtain information.
    * @param nObject Object number from which you want to obtain information.
-   * @param pInfos Pointer to a {@link StudiableInfo} (TSurfObjectInfos) structure which has been previously initialized.
+   * @param pInfos Pointer to a {@link StudiableInfo} (TSurfObjectInfos) structure which has been
+   *     previously initialized.
    * @return kdsOK if successful.
    */
   int dsReadObjectInfos(long hFile, NativeLong nObject, StudiableInfo pInfos);
 
   /**
-   * Obtains the comment associated with an object.
-   * Original function from DLL:
-   *   DSRESULT dsReadObjectComment(
-   *     DSFILE hFile,
-   *     long nObject,
-   *     char* strComment
-   *   );
+   * Obtains the comment associated with an object. Original function from DLL: DSRESULT
+   * dsReadObjectComment( DSFILE hFile, long nObject, char* strComment );
    */
   int dsReadObjectComment(long hFile, NativeLong nObject, byte[] strComment);
 
   /**
-   * Obtains the comment associated with an object.
-   * Original function from DLL:
-   *   DSRESULT dsReadObjectPoints(
-   *     DSFILE hFile,
-   *     long nObject,
-   *     long* pBuffer
-   *   );
+   * Obtains the comment associated with an object. Original function from DLL: DSRESULT
+   * dsReadObjectPoints( DSFILE hFile, long nObject, long* pBuffer );
    */
   int dsReadObjectPoints(long hFile, NativeLong nObject, int[] pBuffer);
 
   /**
-   * Obtains information about the specified surface object.
-   * This is similar to {@link SurfAPI#dsReadObjectInfos} except no struct is needed.
-   * Original function from DLL:
-   *   DSRESULT dsReadObjectInfosWithoutStruct(
-   *     DSFILE file,
-   *     long nObject,
-   *     DSSTUDIABLE* Type,
-   *     char* strName,
-   *     char* strOperatorName,
-   *     short* nAcquisitionType,
-   *     short* nTracking,
-   *     short* nSpecialPoints,
-   *     BOOL* bAbsolute,
-   *     float* fGaugeResolution,
-   *     long* nZMin,
-   *     long* nZMax,
-   *     long* nXCount,
-   *     long* nYCount,
-   *     float* fXStep,
-   *     float* fYStep,
-   *     float* fZStep,
-   *     float* fXOffset,
-   *     float* fYOffset,
-   *     float* fZOffset,
-   *     char* strXAxisName,
-   *     char* strYAxisName,
-   *     char* strZAxisName,
-   *     TUNIT* tXAxisUnit,
-   *     TUNIT* tYAxisUnit,
-   *     TUNIT* tZAxisUnit,
-   *     BOOL* bInverted,
-   *     short* nRectified,
-   *     short* nSecond,
-   *     short* nMinute,
-   *     short* nHour,
-   *     short* nDay,
-   *     short* nMonth,
-   *     short* nYear,
-   *     float* fMeasureLength,
-   *     char* ClientInfo,
-   *     short* nCommentSize
-   *   );
+   * Obtains information about the specified surface object. This is similar to {@link
+   * SurfAPI#dsReadObjectInfos} except no struct is needed. Original function from DLL: DSRESULT
+   * dsReadObjectInfosWithoutStruct( DSFILE file, long nObject, DSSTUDIABLE* Type, char* strName,
+   * char* strOperatorName, short* nAcquisitionType, short* nTracking, short* nSpecialPoints, BOOL*
+   * bAbsolute, float* fGaugeResolution, long* nZMin, long* nZMax, long* nXCount, long* nYCount,
+   * float* fXStep, float* fYStep, float* fZStep, float* fXOffset, float* fYOffset, float* fZOffset,
+   * char* strXAxisName, char* strYAxisName, char* strZAxisName, TUNIT* tXAxisUnit, TUNIT*
+   * tYAxisUnit, TUNIT* tZAxisUnit, BOOL* bInverted, short* nRectified, short* nSecond, short*
+   * nMinute, short* nHour, short* nDay, short* nMonth, short* nYear, float* fMeasureLength, char*
+   * ClientInfo, short* nCommentSize );
+   *
    * @param file Handle of the file from which you want to obtain information.
    * @param nObject Object number from which you want to obtain information.
    * @param nType Type of surface.
@@ -215,6 +167,5 @@ interface SurfAPI extends StdCallLibrary {
       ShortByReference nYear,
       FloatByReference fMeasureLength,
       char[] ClientInfo,
-      ShortByReference nCommentSize
-  );
+      ShortByReference nCommentSize);
 }
