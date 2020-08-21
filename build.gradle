@@ -7,9 +7,8 @@ plugins {
     id 'org.openjfx.javafxplugin' version '0.0.9'
 }
 
-sourceCompatibility = '1.14'
-targetCompatibility = '1.14'
 mainClassName = 'edu.wpi.surflab.CurvatureApp'
+String javaVersion = "14"
 
 //TestFX doesn't play nice with macOS
 String osName = System.getProperty("os.name").toLowerCase();
@@ -46,8 +45,13 @@ dependencies {
     )
 }
 
+java {
+    sourceCompatibility = JavaVersion.valueOf("VERSION_" + javaVersion)
+    targetCompatibility = JavaVersion.valueOf("VERSION_" + javaVersion)
+}
+
 javafx {
-    version = "14"
+    version = javaVersion
     modules = [
         'javafx.fxml',
         'javafx.base',
@@ -70,7 +74,7 @@ jar {
 }
 
 jacoco {
-    toolVersion = "0.8.4"
+    toolVersion = "0.8.5"
 }
 
 jacocoTestCoverageVerification {
