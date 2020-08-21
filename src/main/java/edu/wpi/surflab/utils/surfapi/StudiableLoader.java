@@ -2,6 +2,7 @@ package edu.wpi.surflab.utils.surfapi;
 
 import com.sun.jna.Native;
 import com.sun.jna.NativeLong;
+import com.sun.jna.Structure;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.LongByReference;
 import com.sun.jna.ptr.ShortByReference;
@@ -9,6 +10,7 @@ import edu.wpi.surflab.utils.ResourceLoader;
 import edu.wpi.surflab.utils.surfapi.types.FileOpenFlags;
 import edu.wpi.surflab.utils.surfapi.types.ResultType;
 import edu.wpi.surflab.utils.surfapi.types.StudiableInfo;
+import java.io.UnsupportedEncodingException;
 import lombok.Getter;
 
 /**
@@ -16,7 +18,7 @@ import lombok.Getter;
  * @see SurfAPI
  * @author Matthew Sppofford
  */
-public class SurfaceLoader {
+public class StudiableLoader {
   /**
    * Stores implementation for SurfAPI.
    */
@@ -29,7 +31,7 @@ public class SurfaceLoader {
   /**
    * Stores loaded surface data from API.
    */
-  private StudiableInfo[] surfaces = null;
+  private StudiableCollection[] surfaces = null;
 
   /**
    * File handle address pointer.
@@ -41,16 +43,16 @@ public class SurfaceLoader {
    * Creates a surface loader object using given surface file to be loaded.
    * @param filePath Location of surface file to be opened. Recommended to be absolute file path.
    */
-  public SurfaceLoader(final String filePath) {
+  public StudiableLoader(final String filePath) {
     this.filePath = filePath;
   }
 
   /**
    * Outputs copy of previously loaded surface data.
-   * @return Array of {@link StudiableInfo} from API. Returns null if {@link SurfaceLoader#load()}
+   * @return Array of {@link StudiableInfo} from API. Returns null if {@link StudiableLoader#load()}
    * has not been called yet.
    */
-  public StudiableInfo[] getSurfaces() {
+  public StudiableCollection[] getSurfaces() {
     if(surfaces == null) {
       return null;
     } else {
@@ -60,50 +62,67 @@ public class SurfaceLoader {
 
   /**
    * Opens surface file and outputs raw surfaces data.
-   * After the first load, the data is not reloaded.
-   * @return Array of {@link StudiableInfo} from API.
+   * After the first load, the data is not reloaded and instead uses the previously loaded data.
+   * @return Array of {@link StudiableCollection} from API. Outputs null if load was unsuccessful.
+   *         Outputs null elements if that studiable could not be loaded correctly.
    */
-  public StudiableInfo[] load() throws UnsupportedOperationException {
-    int result = 0;
-
+  public StudiableCollection[] load() throws UnsupportedOperationException {
     // Only use API if surfaces have not been loaded
     if(surfaces == null) {
       // Create array for surfaces being loaded later
-      StudiableInfo[] loadedSurfaces;
+      StudiableCollection[] loadedSurfaces;
 
+      boolean successful = false;
       try {
         ShortByReference objCountPtr = new ShortByReference();
 //        NativeLongByReference fileHandlePtr = new NativeLongByReference();
         LongByReference fileHandlePtr = new LongByReference();
         // Use surfAPI to open file for reading
-        result = api.dsOpenStudiable(filePath, FileOpenFlags.kdsReadFile.getValue(),
-                                     new IntByReference(), objCountPtr, fileHandlePtr);
-        // Check if surface opened successfully
-        checkSuccessful(result);
+        checkSuccessful(api.dsOpenStudiable(filePath, FileOpenFlags.kdsReadFile.getValue(),
+                                     new IntByReference(), objCountPtr, fileHandlePtr));
 
         // Update studiable attributes
         short objCount = objCountPtr.getValue();
         fileHandleAddr = fileHandlePtr.getValue();
 
         // Store loaded surfaces
-        loadedSurfaces = new StudiableInfo[objCount];
+        loadedSurfaces = new StudiableCollection[objCount];
         // Collect data for surfaces
         for(int i = 0; i < loadedSurfaces.length; i++) {
-          // Initialize pointer to surface data
-          StudiableInfo surfPtr = new StudiableInfo();
-          // Read surface data
-          result = api.dsReadObjectInfos(this.fileHandleAddr, new NativeLong(i+1), surfPtr);
+          NativeLong currObj = new NativeLong(i+1);
+
+          // Read surface metadata
+          StudiableInfo info = new StudiableInfo();
+          checkSuccessful(api.dsReadObjectInfos(this.fileHandleAddr, currObj, info));
+
+          Structure[] structs = info.toArray(info.unsignedSize.intValue());
+
+          // Read surface comment data
+          byte[] comment = new byte[info.commentSize];
+          if(info.commentSize > 0) {
+            checkSuccessful(api.dsReadObjectComment(this.fileHandleAddr, currObj, comment));
+          }
+
+          // Read surface point data
+          final int size = info.xCount.intValue() * info.yCount.intValue();
+          int[] points = new int[size];
+          if(size > 0) {
+            checkSuccessful(api.dsReadObjectPoints(this.fileHandleAddr, currObj, points));
+          }
 
           // Check if surface was read successfully
-          checkSuccessful(result);
-          loadedSurfaces[i] = surfPtr;
+          try {
+            loadedSurfaces[i] = new StudiableCollection(info, new String(comment, "UTF-8"), points);
+          } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            loadedSurfaces[i] = null;
+          }
         }
+        successful = true;
       } finally {
-        // Close opened surface if load was successful
-        // If it wasn't successful, then the studiable has already been aborted
-        if(ResultType.isSuccess(result)) {
-          result = api.dsCloseStudiable(this.fileHandleAddr);
-          // Check if surface closed successfully
+        int result = api.dsCloseStudiable(this.fileHandleAddr);
+        // Check if surface closed successfully only if a previous error was not thrown
+        if(successful) {
           checkSuccessful(result);
         }
       }
@@ -131,7 +150,7 @@ public class SurfaceLoader {
     // If unsuccessful, throw error
     if (!ResultType.isSuccess(result)) {
       // Abort file opening process
-      int newResult = api.dsAbortOpsOnStudiable(this.fileHandleAddr);
+      api.dsAbortOpsOnStudiable(this.fileHandleAddr);
       // Throw error
       throw new UnsupportedOperationException("Unsupported return from surfAPI, "
           + "output was: " + result.name() + "(" + result.getValue() + ")");

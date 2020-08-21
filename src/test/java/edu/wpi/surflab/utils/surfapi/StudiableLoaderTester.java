@@ -1,8 +1,10 @@
 package edu.wpi.surflab.utils.surfapi;
 
+import com.sun.jna.NativeLong;
 import edu.wpi.surflab.utils.ResourceLoader;
 import edu.wpi.surflab.utils.surfapi.types.StudiableInfo;
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Paths;
@@ -13,10 +15,10 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests usage of SurfAPI in order to load surfaces.
  * Also tests error handling methods
- * @see SurfaceLoader
+ * @see StudiableLoader
  * @author Matthew Spofford
  */
-public class SurfaceLoaderTester {
+public class StudiableLoaderTester {
 
   /**
    * Refers to location of example surfaces.
@@ -47,7 +49,7 @@ public class SurfaceLoaderTester {
    */
   @Test
   public void getSurfPath() {
-    SurfaceLoader loader = new SurfaceLoader(COIN_SURF_PATH);
+    StudiableLoader loader = new StudiableLoader(COIN_SURF_PATH);
     Assertions.assertEquals(COIN_SURF_PATH, loader.getFilePath());
   }
 
@@ -56,23 +58,43 @@ public class SurfaceLoaderTester {
    */
   @Test
   public void getSurfWithoutLoad() {
-    SurfaceLoader loader = new SurfaceLoader(COIN_SURF_PATH);
+    StudiableLoader loader = new StudiableLoader(COIN_SURF_PATH);
     Assertions.assertNull(loader.getSurfaces());
   }
 
   /**
-   * Test loading one surface successfully with {@link SurfaceLoader#load()}.
+   * Test loading one surface successfully with {@link StudiableLoader#load()}.
    */
   @Test
-  public void loadSingleSurface() {
-    SurfaceLoader loader = new SurfaceLoader(BONE_SURF_PATH);
-    StudiableInfo[] data = loader.load();
-    // Check that output is not bad
-    Assertions.assertNotNull(data);
-    // Check that length is correct
-    Assertions.assertEquals(1, data.length);
+  public void loadSingleSurface() throws UnsupportedEncodingException {
+    StudiableLoader loader = new StudiableLoader(BONE_SURF_PATH);
+    Assertions.assertEquals(BONE_SURF_PATH, loader.getFilePath());
+
+    StudiableCollection[] collectionArr = loader.load();
 
     // Checks that surface can still be retrieved after loading
-    Assertions.assertArrayEquals(data, loader.getSurfaces());
+    Assertions.assertArrayEquals(collectionArr, loader.getSurfaces());
+
+    // Check that length is correct
+    Assertions.assertEquals(1, collectionArr.length);
+    StudiableCollection collect = collectionArr[0];
+
+    // Check that metadata is accurate
+    StudiableInfo info = collect.getMetadata();
+    Assertions.assertEquals(2, info.type);
+    Assertions.assertEquals(
+        "Magdalenian carved bone  - Pr",
+        new String(info.name, "UTF-8").trim());
+    Assertions.assertEquals(true, info.absolute);
+    Assertions.assertEquals(1, info.specialPointType);
+    Assertions.assertEquals(new NativeLong(-18438), info.zMin);
+    Assertions.assertEquals(new NativeLong(7395), info.zMax);
+
+    // Check that comment is accurate
+    Assertions.assertEquals("", collect.getComment());
+
+    // Check that points are accurate
+    int[] points = collect.getPoints();
+    Assertions.assertEquals(345158, points.length);
   }
 }

@@ -75,6 +75,28 @@ interface SurfAPI extends StdCallLibrary {
   int dsReadObjectInfos(long hFile, NativeLong nObject, StudiableInfo pInfos);
 
   /**
+   * Obtains the comment associated with an object.
+   * Original function from DLL:
+   *   DSRESULT dsReadObjectComment(
+   *     DSFILE hFile,
+   *     long nObject,
+   *     char* strComment
+   *   );
+   */
+  int dsReadObjectComment(long hFile, NativeLong nObject, byte[] strComment);
+
+  /**
+   * Obtains the comment associated with an object.
+   * Original function from DLL:
+   *   DSRESULT dsReadObjectPoints(
+   *     DSFILE hFile,
+   *     long nObject,
+   *     long* pBuffer
+   *   );
+   */
+  int dsReadObjectPoints(long hFile, NativeLong nObject, int[] pBuffer);
+
+  /**
    * Obtains information about the specified surface object.
    * This is similar to {@link SurfAPI#dsReadObjectInfos} except no struct is needed.
    * Original function from DLL:

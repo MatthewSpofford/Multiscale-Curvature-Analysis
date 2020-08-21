@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
               "gaugeResolution",
               "zMin", "zMax",
               "xCount", "yCount", "wCount",
-              "fXStep", "fYStep", "fZStep",
+              "xStep", "yStep", "zStep",
               "xOffset", "yOffset", "zOffset",
               "xAxisName", "yAxisName", "zAxisName",
               "xAxisUnit", "yAxisUnit", "zAxisUnit",
@@ -50,12 +50,12 @@ public class StudiableInfo extends Structure {
   /**
    * Name of surface (maximum length of 31).
    */
-  @Getter public char[] name = new char[31];
+  @Getter public byte[] name = new byte[31];
 
   /**
    * Name of operator who measured the surface (maximum length of 31).
    */
-  @Getter public char[] operator = new char[31];
+  @Getter public byte[] operator = new byte[31];
 
   /**
    * Type of sensor used for measuring the surface.
@@ -107,15 +107,15 @@ public class StudiableInfo extends Structure {
   /**
    * X-axis step value.
    */
-  @Getter public float fXStep;
+  @Getter public float xStep;
   /**
    * Y-axis step value.
    */
-  @Getter public float fYStep;
+  @Getter public float yStep;
   /**
    * Z-axis step value.
    */
-  @Getter public float fZStep;
+  @Getter public float zStep;
 
   /**
    * X-axis offset.
@@ -133,15 +133,15 @@ public class StudiableInfo extends Structure {
   /**
    * Name of the X-axis (max size of 17 bytes).
    */
-  @Getter public char[] xAxisName = new char[17];
+  @Getter public byte[] xAxisName = new byte[17];
   /**
    * Name of the Y-axis (max size of 17 bytes).
    */
-  @Getter public char[] yAxisName = new char[17];
+  @Getter public byte[] yAxisName = new byte[17];
   /**
    * Name of the Z-axis (max size of 17 bytes).
    */
-  @Getter public char[] zAxisName = new char[17];
+  @Getter public byte[] zAxisName = new byte[17];
 
   /**
    * X-axis measurement units.
@@ -159,15 +159,15 @@ public class StudiableInfo extends Structure {
   /**
    * If unknown X-axis unit from enum, unit is present in this field (max size of 17 bytes).
    */
-  @Getter public char[] strXAxisUnknownUnit = new char[17];
+  @Getter public byte[] strXAxisUnknownUnit = new byte[17];
   /**
    * If unknown Y-axis unit from enum, unit is present in this field (max size of 17 bytes).
    */
-  @Getter public char[] strYAxisUnknownUnit = new char[17];
+  @Getter public byte[] strYAxisUnknownUnit = new byte[17];
   /**
    * If unknown Z-axis unit from enum, unit is present in this field (max size of 17 bytes).
    */
-  @Getter public char[] strZAxisUnknownUnit = new char[17];
+  @Getter public byte[] strZAxisUnknownUnit = new byte[17];
 
   /**
    * Defines if the studiable values are inverted.
@@ -211,7 +211,7 @@ public class StudiableInfo extends Structure {
   /**
    * Client information (max size of 128 bytes).
    */
-  @Getter public char[] clientInfo = new char[17];
+  @Getter public byte[] clientInfo = new byte[128];
 
   /**
    * Size in bytes of the comment.
@@ -235,11 +235,11 @@ public class StudiableInfo extends Structure {
   /**
    * If unknown T-axis unit from enum, unit is present in this field (max size of 14 bytes).
    */
-  @Getter public char[] strTAxisUnknownUnit = new char[14];
+  @Getter public byte[] strTAxisUnknownUnit = new byte[14];
   /**
    * Name of the T-axis (max size of 14 bytes).
    */
-  @Getter public char[] tAxisName = new char[14];
+  @Getter public byte[] tAxisName = new byte[14];
 
   // *** T Axis ******************
 }
